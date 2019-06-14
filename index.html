@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Media Monks - Frontend Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="./assets/images/favicon.ico">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="monk-loading-container">
+      <img class="monk-loading" src="assets/images/monk.png">
+      <span class="monk-loading-text">Patience, young padawan...</span>
+    </div>
+    <img class="main" src="./assets/images/background.jpg">
+      <div class="container">
+        <div class="arrow-container">
+          <div><img data-arrow="left" class="arrow" src="./assets/images/back.svg"></div>
+          <div><img data-arrow="right" class="arrow" src="./assets/images/next.svg"></div>
+        </div>
+        <div data-msg="0" class="flex--column text fix-underline">
+          <span>WE ARE BREAKING</span>
+          <span>OUR VOW</span>
+          <span>OF SILENCE</span>
+        </div>
+        <div data-msg="1" class="hide flex--column text fix-underline">
+          <span>TALENT IS GIVEN</span>
+          <span>TRUE SKILL IS</span>
+          <span>EARNED</span>
+        </div>
+        <div data-msg="2" class="hide flex--column text fix-underline">
+          <span>BE FLEXIBLE TO</span>
+          <span>CHANGE AND</span>
+          <span>STURDY IN</span>
+          <span>CONVICTION</span>
+        </div>
+        <div data-msg="3" class="hide flex--column text fix-underline">
+          <span>USE MANY SKILLS</span>
+          <span>YET WORK AS ONE</span>
+        </div>
+        <div data-msg="4" class="hide flex--column text fix-underline">
+          <span>TO MASTER</span>
+          <span>ANYTHING FIND</span>
+          <span>INTEREST IN EVERYTHING</span>
+        </div>
+        <div data-msg="5" class="hide flex--column text fix-underline">
+          <span>INDIVIDUALS</span>
+          <span>FLORISH</span>
+          <span>IF CULTURE</span>
+          <span>AND WISDOM</span>
+          <span>ARE SHARED</span>
+        </div>
+        <div data-msg="6" class="hide flex--column text fix-underline">
+          <span>TRAIN FOR</span>
+          <span>PERFECTION BUT</span>
+          <span>AIM FOR MORE</span>
+        </div>
+        <div data-msg="7" class="hide flex--column text fix-underline">
+          <span>TAKE PRIDE IN YOUR</span>
+          <span>WORK BUT DO NOT</span>
+          <span>SEEK PRAISE</span>
+        </div>
+        <div data-msg="8" class="hide flex--column text fix-underline">
+          <span>TEMPORARY</span>
+          <span>SACRIFICE BRINGS</span>
+          <span>LASTING RESULTS</span>
+        </div>
+        <footer>
+          <div class="flex-align">
+            <div id="history-container" class="flex--column space-up">
+              <span>In January 2011, after a decade of digital, we opened the doors to our temple.</span>
+              <span>Follow our noble eightfold path to digital enlightenment here.</span>
+            </div>
+            <div class="flex">
+              <div class="box-container">
+                <i class="active" data-box="0"> </i>
+                <i data-box="1">1</i>
+                <i data-box="2">2</i>
+                <i data-box="3">3</i>
+                <i data-box="4">4</i>
+                <i data-box="5">5</i>
+                <i data-box="6">6</i>
+                <i data-box="7">7</i>
+                <i data-box="8">8</i>
+                <i data-box="9"> </i>
+              </div>
+              <div id="step-container" class="space-right remove"><span>Step <label id="step"></label> out of 8 on the path to digital enlightenment.</span></div>
+            </div>
+          </div>
+          <img src="./assets/images/logo.svg">
+        </footer>
+      </div>
+    </img>
+    <section>
+      <div data-msg="9" class="text">
+        <span>BECOME A MONK</span>
+      </div>
+      <div class="flex--column rrss">
+        <div class="flex--column">
+          <span>Interested in joining our monastery?</span>
+          <span>Check out out openings on mediamonks.com/careers.</span>
+        </div>
+        <div class="flex">
+          <span>Mail ons</span>
+          <span>Facebook</span>
+          <span>Twitter</span>
+        </div>
+      </div>
+    </section>
+    <script>
+      const loading = document.querySelector(".monk-loading-container");
+      const monk = document.querySelector(".monk-loading");
+      const monktext = document.querySelector(".monk-loading-text");
+
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 0);
+      setTimeout(() => {
+        monk.classList.add("hide");
+        monktext.classList.add("hide");
+      }, 2000);
+      setTimeout(() => {
+        loading.classList.add("remove");
+      }, 3000);
+    
+      let current_view = 0;
+      const body = document.querySelector("body");
+      const arrow_right = document.querySelector("img[data-arrow=right]");
+      const arrow_left = document.querySelector("img[data-arrow=left]");
+      const boxes = [...document.querySelectorAll("i[data-box]")];
+      const msgs = [...document.querySelectorAll("div[data-msg]")];
+      const step_label = document.querySelector("#step");
+      const step_container = document.querySelector("#step-container");
+      const history_container = document.querySelector("#history-container");
+
+      function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          var later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          };
+          var callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+          if (callNow) func.apply(context, args);
+        };
+      };
+
+      function checkForUpdates() {
+        smoothScroll(current_view);
+        checkForInsertsOrRemoves();
+        msgs.map(msg => {
+          if(msg.dataset.msg == current_view) {
+            msg.classList.remove("hide");
+          } else {
+            msg.classList.add("hide");
+          };
+        });
+        boxes.map(box => {
+          if(box.dataset.box == current_view) {
+            box.classList.add("active");
+          } else {
+            box.classList.remove("active");
+          };
+        });
+        setStep();
+      }
+
+      function checkForInsertsOrRemoves() {
+        if(parseInt(current_view) >= 1 && parseInt(current_view) < 9) {
+          step_container.classList.remove("remove");
+        } else {
+          step_container.classList.add("remove");
+        };
+        if(parseInt(current_view) === 0) {
+          history_container.classList.remove("remove");
+        } else {
+          history_container.classList.add("remove");
+        };
+      }
+
+      function setStep() {
+        step_label.innerHTML = current_view;
+      }
+
+      function next() {
+        if(current_view <= 8) {
+          current_view++;
+          checkForUpdates();
+        };
+      };
+
+      function prev() {
+        if(current_view >= 1){
+          current_view--;
+          checkForUpdates();
+        }
+      };
+
+      function smoothScroll(position) {
+        const totalwidth = body.scrollWidth;
+        const scrollPercentageToPixel = [0,0.10,0.18,0.28,0.39,0.50,0.61,0.76,0.76,1].map(e => e * totalwidth);
+        window.scrollTo(scrollPercentageToPixel[position],0);
+      };
+
+      var debouncedNext = debounce(next, 250);
+      var debouncedPrev = debounce(prev, 250);
+    
+      arrow_right.addEventListener('click', () => debouncedNext());
+      arrow_left.addEventListener('click', () => debouncedPrev());
+      boxes.forEach(box => box.addEventListener('click', function() {
+        current_view = parseInt(box.dataset.box);
+        checkForUpdates();
+      }));
+    </script>
+  </body>
+</html>
